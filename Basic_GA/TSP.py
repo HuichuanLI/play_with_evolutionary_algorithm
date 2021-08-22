@@ -35,6 +35,7 @@ class GA(object):
         total_distance = np.empty((line_x.shape[0],), dtype=np.float64)
         for i, (xs, ys) in enumerate(zip(line_x, line_y)):
             total_distance[i] = np.sum(np.sqrt(np.square(np.diff(xs)) + np.square(np.diff(ys))))
+        # 距离越大则代表fitness越小
         fitness = np.exp(self.DNA_size * 2 / total_distance)
         return fitness, total_distance
 
@@ -43,10 +44,14 @@ class GA(object):
         return self.pop[idx]
 
     def crossover(self, parent, pop):
+        # 交叉部分：比较复杂
         if np.random.rand() < self.cross_rate:
+            # 选择交叉的样本
             i_ = np.random.randint(0, self.pop_size, size=1)  # select another individual from pop
             cross_points = np.random.randint(0, 2, self.DNA_size).astype(np.bool)  # choose crossover points
+            # 获取keep_city的位置
             keep_city = parent[~cross_points]  # find the city number
+            #
             swap_city = pop[i_, np.isin(pop[i_].ravel(), keep_city, invert=True)]
             parent[:] = np.concatenate((keep_city, swap_city))
         return parent
@@ -84,4 +89,16 @@ class TravelSalesPerson(object):
         plt.pause(0.01)
 
 
+ga = GA(DNA_size=N_CITIES, cross_rate=CROSS_RATE, mutation_rate=MUTATE_RATE, pop_size=POP_SIZE)
 env = TravelSalesPerson(N_CITIES)
+
+for generation in range(N_GENERATIONS):
+    lx, ly = ga.translateDNA(ga.pop, env.city_position)
+    fitness, total_distance = ga.get_fitness(lx, ly)
+    ga.evolve(fitness)
+    best_idx = np.argmax(fitness)
+    print('Gen:', generation, '| best fit: %.2f' % fitness[best_idx], )
+
+    env.plotting(lx[best_idx], ly[best_idx], total_distance[best_idx])
+plt.ioff()
+plt.show()
