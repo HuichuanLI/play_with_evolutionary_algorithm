@@ -15,8 +15,10 @@ class Node(object):
 
     def __cmp__(self, other):
         return cmp(self.bound, other.bound)
+
     def __lt__(self, other):  # operator <
         return self.bound < other.bound
+
     def __str__(self):
         return str(tuple([self.level, self.path, self.bound]))
 
@@ -60,7 +62,7 @@ class DP(object):
             result += dis_mat[a][b]
         return result
 
-    def run(self,src=0):
+    def run(self, src=0):
         optimal_tour = []
         n = len(self.dis_mat)
         if not n:
@@ -136,6 +138,7 @@ class DP(object):
             _bound += min([adj_mat[r][i] for i in filter(lambda x: x != r, p)])
         return _bound
 
+
 # 读取数据
 def read_tsp(path):
     lines = open(path, 'r').readlines()
@@ -173,4 +176,3 @@ print('规划的路径长度:{}'.format(Best))
 # plt.plot(Best_path[:, 0], Best_path[:, 1])
 # plt.title('规划结果')
 # plt.show()
-

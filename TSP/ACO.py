@@ -24,6 +24,7 @@ class ACO(object):
         self.iter_x = []
         self.iter_y = []
         # self.greedy_init(self.dis_mat,100,num_city)
+
     def greedy_init(self, dis_mat, num_total, num_city):
         start_index = 0
         result = []
@@ -55,10 +56,10 @@ class ACO(object):
         sortindex = np.argsort(pathlens)
         index = sortindex[0]
         result = result[index]
-        for i in range(len(result)-1):
+        for i in range(len(result) - 1):
             s = result[i]
-            s2 = result[i+1]
-            self.Tau[s][s2]=1
+            s2 = result[i + 1]
+            self.Tau[s][s2] = 1
         self.Tau[result[-1]][result[0]] = 1
         # for i in range(num_city):
         #     for j in range(num_city):
@@ -166,7 +167,7 @@ class ACO(object):
             # 保存结果
             self.iter_x.append(cnt)
             self.iter_y.append(best_lenth)
-            print(cnt,best_lenth)
+            print(cnt, best_lenth)
         return best_lenth, best_path
 
     def run(self):

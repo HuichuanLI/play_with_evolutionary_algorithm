@@ -9,12 +9,12 @@ class PSO(object):
         self.iter_max = 500  # 迭代数目
         self.num = 200  # 粒子数目
         self.num_city = num_city  # 城市数
-        self.location = data # 城市的位置坐标
+        self.location = data  # 城市的位置坐标
         # 计算距离矩阵
         self.dis_mat = self.compute_dis_mat(num_city, self.location)  # 计算城市之间的距离矩阵
         # 初始化所有粒子
         # self.particals = self.random_init(self.num, num_city)
-        self.particals = self.greedy_init(self.dis_mat,num_total=self.num,num_city =num_city)
+        self.particals = self.greedy_init(self.dis_mat, num_total=self.num, num_city=num_city)
         self.lenths = self.compute_paths(self.particals)
         # 得到初始化群体的最优解
         init_l = min(self.lenths)
@@ -34,6 +34,7 @@ class PSO(object):
         # 存储每次迭代的结果，画出收敛图
         self.iter_x = [0]
         self.iter_y = [init_l]
+
     def greedy_init(self, dis_mat, num_total, num_city):
         start_index = 0
         result = []
@@ -124,7 +125,7 @@ class PSO(object):
     def cross(self, cur, best):
         one = cur.copy()
         l = [t for t in range(self.num_city)]
-        t = np.random.choice(l,2)
+        t = np.random.choice(l, 2)
         x = min(t)
         y = max(t)
         cross_part = best[x:y]
@@ -138,11 +139,10 @@ class PSO(object):
         l1 = self.compute_pathlen(one, self.dis_mat)
         one2 = cross_part + tmp
         l2 = self.compute_pathlen(one2, self.dis_mat)
-        if l1<l2:
+        if l1 < l2:
             return one, l1
         else:
             return one, l2
-
 
     # 粒子变异
     def mutate(self, one):
@@ -151,7 +151,7 @@ class PSO(object):
         t = np.random.choice(l, 2)
         x, y = min(t), max(t)
         one[x], one[y] = one[y], one[x]
-        l2 = self.compute_pathlen(one,self.dis_mat)
+        l2 = self.compute_pathlen(one, self.dis_mat)
         return one, l2
 
     # 迭代操作
@@ -166,7 +166,7 @@ class PSO(object):
                     self.best_l = tmp_l
                     self.best_path = one
 
-                if new_l < tmp_l or np.random.rand()<0.1:
+                if new_l < tmp_l or np.random.rand() < 0.1:
                     one = new_one
                     tmp_l = new_l
 
@@ -177,7 +177,7 @@ class PSO(object):
                     self.best_l = tmp_l
                     self.best_path = one
 
-                if new_l < tmp_l or np.random.rand()<0.1:
+                if new_l < tmp_l or np.random.rand() < 0.1:
                     one = new_one
                     tmp_l = new_l
                 # 变异
@@ -187,7 +187,7 @@ class PSO(object):
                     self.best_l = tmp_l
                     self.best_path = one
 
-                if new_l < tmp_l or np.random.rand()<0.1:
+                if new_l < tmp_l or np.random.rand() < 0.1:
                     one = new_one
                     tmp_l = new_l
 
@@ -247,7 +247,7 @@ Best_path, Best = model.run()
 
 Best_path = np.vstack([Best_path, Best_path[0]])
 fig, axs = plt.subplots(2, 1, sharex=False, sharey=False)
-axs[0].scatter(Best_path[:, 0], Best_path[:,1])
+axs[0].scatter(Best_path[:, 0], Best_path[:, 1])
 Best_path = np.vstack([Best_path, Best_path[0]])
 axs[0].plot(Best_path[:, 0], Best_path[:, 1])
 axs[0].set_title('规划结果')
@@ -256,5 +256,3 @@ best_record = model.iter_y
 axs[1].plot(iterations, best_record)
 axs[1].set_title('收敛曲线')
 plt.show()
-
-

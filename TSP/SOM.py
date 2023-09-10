@@ -193,10 +193,9 @@ plt.plot(data[:, 0], data[:, 1])
 model = SOM(num_city=data.shape[0], data=data.copy())
 Best_path, Best_length = model.run()
 
-
 Best_path = np.vstack([Best_path, Best_path[0]])
 fig, axs = plt.subplots(2, 1, sharex=False, sharey=False)
-axs[0].scatter(Best_path[:, 0], Best_path[:,1])
+axs[0].scatter(Best_path[:, 0], Best_path[:, 1])
 Best_path = np.vstack([Best_path, Best_path[0]])
 axs[0].plot(Best_path[:, 0], Best_path[:, 1])
 axs[0].set_title('规划结果')
