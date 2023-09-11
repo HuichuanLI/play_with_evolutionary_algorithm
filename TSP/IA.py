@@ -98,8 +98,8 @@ class GA(object):
         adp = []
         T, alpha = T, alpha
         # A = 1 / self.Y
-        A = np.array([1 / self.compute_pathlen(fruit, self.dis_mat) for fruit in fruits])
-
+        A = np.array([1.0 / self.compute_pathlen(fruit, self.dis_mat) for fruit in fruits])
+       
         dist_matrix1 = spatial.distance.cdist(fruits, fruits, metric='hamming')  # 抗体之间的hamming距离矩阵
         similiar_matrix1 = dist_matrix1 < 1 - T  # 是否与其他抗体的相似度多于T
         similiar_matrix2 = similiar_matrix1.sum(axis=1)  # 每个抗体与其他抗体相似，计数
