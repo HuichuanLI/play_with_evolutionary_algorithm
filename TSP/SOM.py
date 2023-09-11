@@ -1,6 +1,6 @@
 '''
 notice: this code is referenced by other
-https://github.com/DiegoVicen/som-tsp
+https://github.com/DiegoVicenG/som-tsp
 '''
 import random
 import math
