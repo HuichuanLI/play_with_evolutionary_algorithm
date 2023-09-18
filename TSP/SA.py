@@ -97,9 +97,40 @@ class SA(object):
     # 产生一个新的解：随机交换两个元素的位置
     def get_new_fire(self, fire):
         fire = fire.copy()
-        t = [x for x in range(len(fire))]
-        a, b = np.random.choice(t, 2)
-        fire[a:b] = fire[a:b][::-1]
+        # t = [x for x in range(len(fire))]
+        num = len(fire)
+        print("fire")
+        print(len(fire))
+
+        # 下面的两交换和三角换是两种扰动方式，用于产生新解
+        if np.random.rand() > 0.5:  # 交换路径中的这2个节点的顺序
+            # np.random.rand()产生[0, 1)区间的均匀随机数
+            while True:  # 产生两个不同的随机数
+                loc1 = np.int(np.ceil(np.random.rand() * (num - 1)))
+                loc2 = np.int(np.ceil(np.random.rand() * (num - 1)))
+                ## print(loc1,loc2)
+                if loc1 != loc2:
+                    break
+            fire[loc1], fire[loc2] = fire[loc2], fire[loc1]
+        else:  # 三交换
+            while True:
+                loc1 = np.int(np.ceil(np.random.randint(1, num)))
+                loc2 = np.int(np.ceil(np.random.randint(1, num)))
+                loc3 = np.int(np.ceil(np.random.randint(1, num)))
+                # print(loc1, loc2, loc3)
+                if ((loc1 != loc2) & (loc2 != loc3) & (loc1 != loc3)):
+                    break
+
+            # 下面的三个判断语句使得loc1<loc2<loc3
+            if loc1 > loc2:
+                loc1, loc2 = loc2, loc1
+            if loc2 > loc3:
+                loc2, loc3 = loc3, loc2
+            if loc1 > loc2:
+                loc1, loc2 = loc2, loc1
+            tmplist = fire[loc1:loc2].copy()
+            tmplist[loc1:loc3 - loc2 + 1 + loc1] = tmplist[loc2:loc3 + 1].copy()
+            tmplist[loc3 - loc2 + 1 + loc1:loc3 + 1] = tmplist.copy()
         return fire
 
     # 退火策略，根据温度变化有一定概率接受差的解
